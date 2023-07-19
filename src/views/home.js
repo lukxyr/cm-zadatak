@@ -4,28 +4,27 @@ import KitWrapper from "../components/kit-wrapper";
 import "./home.css";
 
 const Home = (props) => {
-  const [visibleKits, setVisibleKits] = useState(3); // Number of initially visible KitWrapper components
-  const totalKits = 6; // Total number of KitWrapper components
-  const [isLoading, setIsLoading] = useState(false); // Loading state for the "Show more" button
-  const [apiKits, setApiKits] = useState([]); // Array to store API fetched kits
+  const [visibleKits, setVisibleKits] = useState(3);
+  const totalKits = 6;
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiKits, setApiKits] = useState([]);
 
   useEffect(() => {
-    fetchKits(); // Fetch kits from API
+    fetchKits();
   }, []);
 
   const fetchKits = async () => {
-    setIsLoading(true); // Set loading state to true
+    setIsLoading(true);
 
     try {
-      // Simulate API fetch with a delay
       const response = await new Promise((resolve) =>
         setTimeout(
           () =>
             resolve([
               {
-                desc: "A DIY voice assistant that talks, lights up, and understands voice commands",
+                desc: "A DIY voice assistant that talks, lights up, and understands voice commands (API)",
                 button: "Shop now",
-                heading: "Spencer",
+                heading: "Spencer (API)",
                 discount: "Limited 20% discount",
                 image_alt: "Spencer Kit",
                 image_src: "/psm-spencer-1-500w.jpg",
@@ -37,9 +36,9 @@ const Home = (props) => {
                   "url(https://aheioqhobo.cloudimg.io/v7/_playground-bucket-v2.teleporthq.io_/2febe907-d54e-4f13-9dc7-a7976fa77a26/ed2219ab-c98b-4f4f-9886-2edb40ea722f?org_if_sml=1)",
               },
               {
-                desc: "Build & code your own DJ mixtable",
+                desc: "Build & code your own DJ mixtable (API)",
                 button: "Shop now",
-                heading: "Jay-D",
+                heading: "Jay-D (API)",
                 discount: "Limited 15% discount",
                 image_alt: "Jay-D Kit",
                 image_src: "/jayd-new-4x3-1-500w.jpg",
@@ -51,9 +50,9 @@ const Home = (props) => {
                   "url(https://aheioqhobo.cloudimg.io/v7/_playground-bucket-v2.teleporthq.io_/2febe907-d54e-4f13-9dc7-a7976fa77a26/22d80716-2aec-4466-afda-a193dee36c00?org_if_sml=1)",
               },
               {
-                desc: "A DIY voice assistant that talks, lights up, and understands voice commands",
+                desc: "A DIY voice assistant that talks, lights up, and understands voice commands (API)",
                 button: "Shop now",
-                heading: "Nibble",
+                heading: "Nibble (API)",
                 discount: "Limited 20% discount",
                 image_alt: "Nibble Kit",
                 image_src: "/psm-nibble-4x3-1-500w.jpg",
@@ -70,27 +69,26 @@ const Home = (props) => {
       );
 
       setApiKits(response);
-      setIsLoading(false); // Set loading state to false
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching kits:", error);
-      setIsLoading(false); // Set loading state to false
+      setIsLoading(false);
     }
+  };
+
+  const handleShowMore = () => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setVisibleKits((prevVisibleKits) => prevVisibleKits + 3);
+      setIsLoading(false);
+    }, 1000);
   };
 
   const kitsToRender = [
     ...apiKits.slice(0, visibleKits - 3),
     ...apiKits.slice(-3),
   ];
-
-  const handleShowMore = () => {
-    setIsLoading(true); // Set loading state to true
-
-    // Simulate an asynchronous operation
-    setTimeout(() => {
-      setVisibleKits((prevVisibleKits) => prevVisibleKits + 3); // Increment the number of visible KitWrapper components by 3
-      setIsLoading(false); // Set loading state to false
-    }, 1000); // Delay the update for demonstration purposes (1 seconds)
-  };
 
   return (
     <section className="home-container">
@@ -108,20 +106,7 @@ const Home = (props) => {
         </div>
         <div className="kits-container home-kitscontainer">
           {kitsToRender.map((kit, index) => (
-            <KitWrapper
-              key={index}
-              desc={kit.desc}
-              button={kit.button}
-              heading={kit.heading}
-              discount={kit.discount}
-              image_alt={kit.image_alt}
-              image_src={kit.image_src}
-              new_price={kit.new_price}
-              old_price={kit.old_price}
-              rootClassName={kit.rootClassName}
-              color={kit.color}
-              bckg_img={kit.bckg_img}
-            />
+            <KitWrapper key={index} {...kit} />
           ))}
         </div>
         {visibleKits < totalKits && (
